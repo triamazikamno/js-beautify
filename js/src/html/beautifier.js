@@ -219,7 +219,9 @@ function Beautifier(html_source, options, js_beautify, css_beautify) {
         // at the wrap_line_length, append a newline/indentation.
         // return true if a newline was added, false if a space was added
         this.space_or_wrap = function(content) {
-            if (this.line_char_count >= this.wrap_line_length) { //insert a line when the wrap_line_length is reached
+            var next_attr_match = /[^=<>\/"'\n\s]+(=".*?"|='.*?'|\/?>$)?/g.exec(this.input.substr(this.pos - 1));
+            var next_attr_len = next_attr_match !== null ? next_attr_match[0].length : 0;
+            if (this.line_char_count + next_attr_len + this.indent_level * this.indent_string.length >= this.wrap_line_length) { //insert a line when the wrap_line_length is reached
                 this.print_newline(false, content);
                 this.print_indentation(content);
                 return true;
